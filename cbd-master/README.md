@@ -1,8 +1,6 @@
 ##Español
 La base de este proyecto fue tomada de https://github.com/braitsch/node-login .
 
-Puedes probar la aplicación en: http://cbd.herokuapp.com .
-
 También está disponible la documentación de este trabajo, donde se estudian estas tecnologías y se realizan una serie de comparaciones.
 
 ###Justificación
