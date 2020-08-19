@@ -1,0 +1,50 @@
+
+// preset form values if we receive a userdata object //
+- user = typeof(udata) != 'undefined' ? udata : { }
+// store the userId on the client side in a hidden input field //
+input(type='hidden', value= user._id)#userId
+
+.login-form
+    //#account-form-container.col-md-4.col-md-offset-4(style="margin-top:20px")
+    .col-md-4.col-md-offset-4(style="margin-top:20px")
+        form(method="post", role="form")#account-form.panel.panel-body.form-horizontal
+            h1
+            p#sub1.subheading Por favor, rellena este formulario con tus datos.
+            hr
+            div
+                #name-cg.control-group
+                div.form-group
+                    label.control-label.col-md-2(for='name-tf') Nombre
+                    div.col-md-6
+                        input#name-tf(type='text', name='name', value= user.name).required.form-control
+                #email-cg.control-group
+                div.form-group
+                    label.control-label.col-md-2(for='email-tf') Email
+                    div.col-md-6
+                        input#email-tf.input-xlarge(type='text', name='email', value= user.email).required.form-control
+                //#clist-cg.control-group
+                //div.form-group
+                    label.control-label.col-md-2(for='country-list') Location
+                    div.col-md-6
+                        select(name='country').form-control
+                            each item in countries
+                                option(selected=item.name == user.country)= item.name
+                hr
+                p#sub2.subheading
+                #user-cg.control-group
+                div.form-group
+                    label.control-label.col-md-2(for='user-tf') Usuario
+                    div.col-md-6
+                        input#user-tf.input-xlarge.disabled(type='text', name='user', value= user.user).required.form-control
+                #pass-cg.control-group
+                div.form-group
+                    label.control-label.col-md-2(for='pass-tf') Contraseña
+                    div.col-md-6
+                        input#pass-tf.input-xlarge(type='password', name='pass', value='').required.form-control
+                div(style="float:right").form-group
+                    button(type='button')#account-form-btn1.btn.btn-default.btn-lg Cancelar
+                    button(type='submit')#account-form-btn2.btn.btn-primary.btn-lg Guardar
+
+// display form errors in a custom modal window //
+
+include modals/form-errors

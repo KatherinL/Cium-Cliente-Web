@@ -1,0 +1,105 @@
+
+extends layout
+
+block content
+    div(ng-app="angularTrip")
+        div(ng-controller="tripController")
+            header.navbar.navbar-fixed-top.navbar-inverse
+                div.navbar-inner
+                    div.container-fluid
+                        div.navbar-header
+                            button.navbar-toggle(type="button", data-toggle="collapse", data-target=".bs-navbar-collapse")
+                                span.sr-only Toggle navigation
+                                span.icon-bar
+                                span.icon-bar
+                                span.icon-bar
+                            a(href="/index").navbar-brand Inicio
+                        nav.collapse.navbar-collapse.bs-navbar-collapse(role="navigation")
+                            ul.nav.navbar-nav
+                                li
+                                    a(href="https://github.com/jualoppaz/cbd/blob/master/trabajo.pdf", target="_blank").seccion Trabajo
+                                li
+                                    a(href="/diagrams").seccion Diagramas
+                                li
+                                    a(href="/contact").seccion Contacto
+                            ul.nav.navbar-nav.navbar-right
+                                li
+                                    a(ng-bind-template="¡Hola, {{loguedUser.user}}!")
+                                li
+                                    button#btn-logout.btn.btn-primary(data-toggle="modal", data-target="#myModal", style="margin-top:7px")
+                                        i.icon-lock.icon-white
+                                        |  Cerrar sesión
+
+            div.panel.panel-body.col-md-10.col-md-offset-1
+                h1(style="text-align: center", ng-bind-template="{{trip.title}}").red
+            div.panel.panel-body.col-md-10.col-md-offset-1(style="text-align:center")
+                div(style="float:left; margin-top: 25px").col-md-5
+                    img(ng-src="/img/{{trip.image}}", height="300", width="400", style="margin-left: 10px; margin-bottom: 10px").col-md-12
+                div.col-md-7
+                    h1(style="text-align: left;").separador-horizontal.green Detalles
+                    div.row
+                        div.col-md-6.izquierda.blue
+                            h3 Lugar
+                        div.col-md-6.izquierda.blue
+                            h3 Día
+                    div.row
+                        div.col-md-6.izquierda
+                            h3(ng-bind-template="{{trip.place}}")
+                        div.col-md-6.izquierda
+                            h3(ng-bind-template="{{trip.moment | date:'dd/MM/yyyy'}}")#moment
+                    div.row
+                        div.col-md-6.izquierda.blue
+                            h3 Precio
+                    div.row
+                        div.col-md-6.izquierda
+                            div(ng-show="precioMayorQueCero()")
+                                h3(ng-bind-template="{{trip.price}} euros").precio
+                            div(ng-show="!precioMayorQueCero()")
+                                h3(ng-bind-template="{{free}}").precio
+            div.panel.panel-body.col-md-10.col-md-offset-1(style="padding-left:30px; padding-right: 25px")
+                h3(style="text-align:justify; margin-top: 10px; margin-left:10px", ng-bind-template="{{trip.description}}").blue
+            div.panel.panel-body.col-md-3-5.col-md-offset-1(style="padding-left:30px; padding-right: 25px")
+                h1.orange Alumnos inscritos
+                div(ng-repeat="user in users")
+                    h3(ng-bind-template="{{$index + 1}}. {{user.name}}").blue
+                form
+                    div(ng-show="!usuarioInscrito() && !excursionRealizada()").centrar.form-group
+                        button(ng-click="apuntarse()").btn.btn-danger.btn-large Apuntarse
+                    div(ng-show="excursionRealizada()").centrar.form-group.alert.alert-danger
+                        | La excursión ya se ha realizado.
+
+
+            div.panel.panel-body.col-md-6.offset-comment(style="padding-left:30px; padding-right: 25px")
+                h1.red Comentarios
+                div(ng-show="invalidComment()").alert.alert-danger
+                    | El comentario no es válido. No puede haber palabras de más de 27 caracteres.
+                div(ng-show="excursionRealizada() && !hayComentarios()").alert.alert-info
+                    | No hay comentarios. Sea el primero en comentar la excursión.
+                div(ng-show="!excursionRealizada()").alert.alert-danger
+                    | No se puede comentar hasta que se haya realizado la excursión.
+                div(ng-repeat="comment in comments")
+                    div.panel.panel-primary
+                        div.panel-heading
+                            h3(ng-bind-template="{{comment.user}}").panel-title
+                        div.panel-body.adapt
+                            i.fa.fa-1.fa-quote-left.pull-left
+                            h3(ng-bind-template="{{comment.text}}").pull-left.trip-comment
+                            i.fa.fa-quote-right.pull-left
+                form(ng-show="excursionRealizada()")
+                    textarea(placeholder="Escribe un comentario", ng-model="formData.comment").form-control.nuevo-comentario#comentario
+                    div.centrar.form-group(style="margin-top:25px")
+                        button(ng-click="comment()").btn.btn-danger.btn-large Enviar
+
+        include modals/alert
+        include modals/confirm
+
+block scripts
+    script(src='/vendor/jquery.min.js')
+    script(src='/vendor/jquery.form.js')
+    script(src='/vendor/bootstrap-modal.js')
+    script(src='/vendor/bootstrap-transition.js')
+    script(src='/js/views/trip.js')
+    script(src='/js/controllers/tripController.js')
+    script(src='/js/form-validators/accountValidator.js')
+    script(src='/js/angular.js')
+    script(src='/js/angular/angularTrip.js')

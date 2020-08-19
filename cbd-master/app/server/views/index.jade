@@ -1,0 +1,61 @@
+extends layout
+
+block content
+    div(ng-app="angularIndex")
+        div(ng-controller="indexController")
+            header.navbar.navbar-fixed-top.navbar-inverse
+                div.navbar-inner
+                    div.container-fluid
+                        div.navbar-header
+                            button.navbar-toggle(type="button", data-toggle="collapse", data-target=".bs-navbar-collapse")
+                                span.sr-only Toggle navigation
+                                span.icon-bar
+                                span.icon-bar
+                                span.icon-bar
+                            a(href="/index").navbar-brand Inicio
+                        nav.collapse.navbar-collapse.bs-navbar-collapse(role="navigation")
+                            ul.nav.navbar-nav
+                                li
+                                    a(href="https://github.com/jualoppaz/cbd/blob/master/trabajo.pdf", target="_blank").seccion Trabajo
+                                li
+                                    a(href="/diagrams").seccion Diagramas
+                                li
+                                    a(href="/contact").seccion Contacto
+                            ul.nav.navbar-nav.navbar-right
+                                li
+                                    a(ng-bind-template="¡Hola, {{loguedUser.user}}!")
+                                li
+                                    button#btn-logout.btn.btn-primary(data-toggle="modal", data-target="#myModal", style="margin-top:7px")
+                                        i.icon-lock.icon-white
+                                        |  Cerrar sesión
+
+            div.panel.panel-body.terms-and-conditions.col-md-8.col-md-offset-2
+                h1(style="text-align: center").red Excursiones disponibles
+            div.panel.panel-body.terms-and-conditions.col-md-8.col-md-offset-2
+                div.pull-left
+                    h3.blue Buscar por texto:
+                div
+                    input(ng-model="search", style="margin-top:20px; margin-left: 10px")
+            div.panel.panel-body.terms-and-conditions.col-md-8.col-md-offset-2(ng-repeat="trip in trips | filter:search", style="text-align:center")
+                div(style="text-align:left")
+                    h1(style="margin-bottom:30px").green
+                        a(ng-href="/trips/{{trip._id}}", ng-bind-template="{{$index + 1}}. {{trip.title}} ({{trip.moment | date:'dd/MM/yyyy'}})").green.hover-red
+                div(style="float:left; margin-right: 20px")
+                    img(ng-src="/img/{{trip.image}}", height="200", width="300", style="margin-left: 10px; margin-bottom: 10px")
+                div(style="margin-left: 10px;")
+                    h3(style="text-align:justify; margin-top: 0px", ng-bind-template="{{trip.description}}").blue
+
+
+        include modals/alert
+        include modals/confirm
+
+block scripts
+    script(src='/vendor/jquery.min.js')
+    script(src='/vendor/jquery.form.js')
+    script(src='/vendor/bootstrap-modal.js')
+    script(src='/vendor/bootstrap-transition.js')
+    script(src='/js/views/index.js')
+    script(src='/js/controllers/indexController.js')
+    script(src='/js/form-validators/accountValidator.js')
+    script(src='/js/angular.js')
+    script(src='/js/angular/angularIndex.js')
